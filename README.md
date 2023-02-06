@@ -32,7 +32,7 @@ import time
 import csv
 from bs4 import BeautifulSoup
 ```
-## STEP 2:  Create chrome driver object and install the compatible chrome Driver manager
+## STEP 2:  Create chrome driver object and install chrome Driver manager
 ```
 driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 ```
@@ -40,7 +40,7 @@ driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
  ```
  driver.get('http://www.olympedia.org/statistics/medal/country')
  ```
- ##STEP 3: Retrieving Form Elements
+ ## STEP 3: Retrieving Form Elements
 We must locate the elements and options necessary to update the table. The Selenium library has many tools for locating elements, circumstances may dictate a preferred path in some cases, but often there are several ways to achieve any objective. Here we’ve chosen to employ the .find_element('id','ID Name') method, which allows us to identify an element by its “id” string.
 
 We can examine the source code of the page to identify an “id”, “class name” or any other feature by right-clicking the page in the browser window and selecting “inspect element”.
@@ -55,5 +55,54 @@ gender = driver.find_element('id','athlete_gender')
 ```
 The next step, is to collect the options for those dropdowns, and we can do so with another locate method:
 ```
+year_options = year.find_elements(By.TAG_NAME,'option')
 
+gender_options = gender.find_elements(By.TAG_NAME,'option')
 ```
+I the code below, we are going to use a nested loops, cycling through men and women first, and on the interior loop, clicking through the years for every summer games. We execute each selection by simply looping each of our option lists and calling the .click() method on the option object to submit that form selection.
+```
+for gender in gender_options[1:]:  # index 0 is omitted because it contains placeholder txt
+   gender.click()
+
+   for year in year_options[2:]: # skipping first two options to start with 1900 
+       year.click()
+```
+Once we’ve made our selections we can pass the page source to Beautiful Soup by calling the .page_source attribute on our driver object to parse the content of this iteration of the page:
+```
+soup = BeautifulSoup(driver.page_source, 'html.parser')
+```
+## STEP 4: Parsing the Source 
+With the page content in hand we must now locate the table elements of interest, so we can copy only those items to our output file. In order to isolate this content, we utilize two versions of Beautiful Soup’s search methods. First, we can grab the start of the row containing team USA results with the .find() method. In this instance, we use a regular expression as an argument to ensure we get the correct object. Next, we can use another variation of a search method, .find_all_next(<tag><limit>) to extract the medal counts. This method allows us to pull all of the objects that follow any other, and an optional <limit> argument gives us the flexibility to specify how many elements (beyond our reference) we’re interested in capturing.
+ ```
+head = the_soup.find(href=re.compile('USA'))
+medal_values= head.find_all_next('td', limit=5)
+ ```
+ We have completed browser automation and with the head.find_all_next('td', limit=5) object we have access to the medal counts for each medal type as well as the overall total for that year. Now, all that remains is to bundle our data and set up our export pipeline. First, we process the data we’ve sourced by calling the .string attribute on the elements we’ve captured and assigning the result to a variable, medals_lst. Then we supplement the medal values with the year and gender values and append the entire thing to a list.
+ 
+ ```
+ try:
+   year_val = year.get_attribute('text')
+   head = the_soup.find(href=re.compile('USA'))
+
+   medal_values = head.find_all_next('td', limit=5)
+   val_lst = [x.string for x in medal_values[1:]] # the first index is the link with the country abbreviation and flag
+
+except:
+   val_lst = ['0' for x in range(4)] # we address years team USA did not compete with this option
+
+val_lst.append(gender_val)
+val_lst.append(year_val)
+
+usa_lst.append(val_lst)
+driver.quit()
+ ```
+ ## STEP 5: Finally we can save our data in csv format
+ ```
+ output_f = open('output.csv', 'w', newline='')
+output_writer = csv.writer(output_f)
+
+for row in usa_lst:
+   output_writer.writerow(row)
+
+output_f.close()
+ ```
