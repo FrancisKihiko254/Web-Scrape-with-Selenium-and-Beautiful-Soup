@@ -19,7 +19,7 @@ Suppose we want to analyze how men and wemen in athletics have performed in a gi
 
 ![olympic](https://user-images.githubusercontent.com/107842949/216932859-d7f482f7-5b67-4d9d-8aef-4946a241f65c.JPG).
 
-##STEP 1: Import the necessary packages
+## STEP 1: Import the necessary packages
 ```
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -35,4 +35,25 @@ from bs4 import BeautifulSoup
 ## STEP 2:  Create chrome driver object and install the compatible chrome Driver manager
 ```
 driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+```
+ Assign the URL for the medals page:
+ ```
+ driver.get('http://www.olympedia.org/statistics/medal/country')
+ ```
+ ##STEP 3: Retrieving Form Elements
+We must locate the elements and options necessary to update the table. The Selenium library has many tools for locating elements, circumstances may dictate a preferred path in some cases, but often there are several ways to achieve any objective. Here we’ve chosen to employ the .find_element('id','ID Name') method, which allows us to identify an element by its “id” string.
+
+We can examine the source code of the page to identify an “id”, “class name” or any other feature by right-clicking the page in the browser window and selecting “inspect element”.
+
+![inspect_element_view (1)](https://user-images.githubusercontent.com/107842949/216948254-a5f1cc60-8f17-4ec6-b392-a727a19ebd17.png)
+
+In this view, we can navigate through all the elements and identify the “id”s we need. The dropdowns for the Olympic year and gender are labeled edition_select and athlete_gender respectively. We assign those elements to variables with the following lines:
+```
+year = driver.find_element('id','edition_select')
+
+gender = driver.find_element('id','athlete_gender')
+```
+The next step, is to collect the options for those dropdowns, and we can do so with another locate method:
+```
+
 ```
