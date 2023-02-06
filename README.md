@@ -15,10 +15,24 @@ pip install bs4
 ```
 We have installed the required packages and now we can dive into the coding part.
 We will be scraping data from [olympedia](http://www.olympedia.org/) websites.
-Suppose we want to analyze how men and wemen atheleties
-![olympic](https://user-images.githubusercontent.com/107842949/216932859-d7f482f7-5b67-4d9d-8aef-4946a241f65c.JPG)
+Suppose we want to analyze how men and wemen in athletics have performed in a given country, how many medals in each category(Gold, Bronze, Silver) they have won since the year 1900.In order to perform this task, we need data and the most reliable source we can get it is from [olympedia](http://www.olympedia.org/).Coping this data one by one manually will be a tedious work and may take many hours to complete,that is where web scraping come in handy.
 
-Import the necessary packages
+![olympic](https://user-images.githubusercontent.com/107842949/216932859-d7f482f7-5b67-4d9d-8aef-4946a241f65c.JPG).
+
+##STEP 1: Import the necessary packages
 ```
-
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+import re
+import time
+import csv
+from bs4 import BeautifulSoup
+```
+## STEP 2:  Create chrome driver object and install the compatible chrome Driver manager
+```
+driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 ```
