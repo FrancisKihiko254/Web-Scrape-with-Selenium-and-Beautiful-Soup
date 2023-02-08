@@ -1,4 +1,4 @@
-# How to do Web Scraping using Selenium, Beautiful-Soup and Python
+# Web Scraping using Selenium, Beautiful-Soup and Python
 Web scraping is an automated technique of extracting data from websites.It can be in form of a text, image or other formats.Internet has enormous volume of data that if exracted, can be used for various purposes including Sentiment analysis, Market reasearch(Price comparison), Data Analysis, Lead generation, News monitoring and Social media analysis.We will be looking at how you can automate your data scraping task.
 ## Pre-requisite
 1. **Selenium**   -is an open source framework for automating web browsers.It is often used for testing web application and scraping websites.  
@@ -11,7 +11,7 @@ pip install selenium
 ```
 ## Install Beautiful Soup
 ``` 
-pip install bs4 
+pip install beautifulsoup4 
 ```
 We have installed the required packages and now we can dive into the coding part.
 We will be scraping data from [olympedia](http://www.olympedia.org/) websites.
@@ -106,3 +106,4 @@ for row in usa_lst:
 
 output_f.close()
  ```
+ If this is helpful, please don't forget to leave a star.It means alot to me.
