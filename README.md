@@ -106,4 +106,6 @@ for row in usa_lst:
 
 output_f.close()
  ```
+ ![olympic_table_brdr](https://user-images.githubusercontent.com/107842949/219665984-ee169ea2-6735-4c2f-8562-9bf92f0c38fb.png)
+
  If this is helpful, please don't forget to leave a star.It means alot to me.
